@@ -9,7 +9,7 @@ from selenium.webdriver.support.ui import Select
 import sys
 import time
 
-TIME_TO_WAIT = 1
+TIME_TO_WAIT = 0.5
 
 driver = webdriver.Chrome()
 
@@ -65,8 +65,6 @@ for link in links:
         fare_name = fare_status.find_element("xpath", "./..").find_element(By.CLASS_NAME, "fareName").text
         if "普通運賃" in fare_name:
             flight_info = link.find_element("id", "disFlightInfo").text
-            yen_index = flight_info.find("¥")
-            flight_info_trimmed = flight_info[:yen_index]
+            cut_index = max(flight_info.find("¥"), flight_info.find("満席"))
+            flight_info_trimmed = flight_info[:cut_index]
             print(f"Flight Info: {flight_info_trimmed}残席: {fare_status.text}\n")
-
-input("Enterキーを押すとブラウザを閉じます...")
